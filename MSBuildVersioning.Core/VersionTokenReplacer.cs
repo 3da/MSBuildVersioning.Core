@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Net;
 using System.Text.RegularExpressions;
 
 namespace MSBuildVersioning.Core
@@ -36,6 +39,7 @@ namespace MSBuildVersioning.Core
             AddToken("USER", () => Environment.UserName);
             AddToken("MACHINE", () => Environment.MachineName);
             AddToken("ENVIRONMENT", GetEnvironmentValue);
+            AddToken("FILE", GetFileValue);
         }
 
         protected void AddToken(string tokenName, TokenFunction function)
@@ -143,7 +147,7 @@ namespace MSBuildVersioning.Core
 
         private class TwoStringArgToken : Token
         {
-            public TokenFunction<string,string> Function;
+            public TokenFunction<string, string> Function;
 
             public override string Replace(string str)
             {
@@ -164,6 +168,13 @@ namespace MSBuildVersioning.Core
         {
             var returnValue = Environment.GetEnvironmentVariable(name);
             return returnValue ?? defaultValue;
+        }
+
+        private string GetFileValue(string path)
+        {
+            if (!File.Exists(path))
+                return string.Empty;
+            return File.ReadLines(path).FirstOrDefault();
         }
     }
 }
