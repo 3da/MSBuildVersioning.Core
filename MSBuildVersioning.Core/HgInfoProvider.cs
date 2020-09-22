@@ -14,6 +14,7 @@ namespace MSBuildVersioning.Core
         private bool? _isWorkingCopyDirty;
         private string _branch;
         private string _tags;
+        private string _changeSetDate;
 
         public override string SourceControlName
         {
@@ -95,6 +96,16 @@ namespace MSBuildVersioning.Core
                 _tags = ExecuteCommand("hg.exe", "identify -t")[0];
             }
             return _tags;
+        }
+
+        public virtual string GetChangesetDate()
+        {
+            if (_changeSetDate == null)
+            {
+                _changeSetDate = ExecuteCommand("hg.exe", $"log --template \"{{date|isodate}}\" - r{GetRevisionNumber()}")[1];
+            }
+
+            return _changeSetDate;
         }
     }
 }

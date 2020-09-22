@@ -17,6 +17,7 @@
             AddToken("DIRTY", () => infoProvider.IsWorkingCopyDirty() ? "1" : "0");
             AddToken("BRANCH", () => infoProvider.GetBranch());
             AddToken("TAGS", () => infoProvider.GetTags());
+            AddToken("REVDATE", ()=> infoProvider.GetChangesetDate());
         }
     }
 }
