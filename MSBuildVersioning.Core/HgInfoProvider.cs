@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 
 namespace MSBuildVersioning.Core
 {
@@ -102,7 +104,10 @@ namespace MSBuildVersioning.Core
         {
             if (_changeSetDate == null)
             {
-                _changeSetDate = ExecuteCommand("hg.exe", $"log --template \"{{date|isodate}}\" - r{GetRevisionNumber()}")[1];
+                var result =
+                    ExecuteCommand("hg.exe", $"log --template \"{{date|isodate}}\" -r{GetRevisionNumber()}");
+
+                _changeSetDate = result[1];
             }
 
             return _changeSetDate;
