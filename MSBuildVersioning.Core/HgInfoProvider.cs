@@ -6,7 +6,7 @@ namespace MSBuildVersioning.Core
 {
     /// <summary>
     /// Provides Mercurial information for a particular file path, by executing and scraping
-    /// information from the hg.exe command-line program.
+    /// information from the hg command-line program.
     /// </summary>
     public class HgInfoProvider : SourceControlInfoProvider
     {
@@ -52,7 +52,7 @@ namespace MSBuildVersioning.Core
 
         private string ExecuteRevisionCommand(string hgArguments)
         {
-            IList<string> results = ExecuteCommand("hg.exe", hgArguments);
+            IList<string> results = ExecuteCommand("hg", hgArguments);
             if (results.Count == 0)
             {
                 _isWorkingCopyDirty = true;
@@ -86,7 +86,7 @@ namespace MSBuildVersioning.Core
         {
             if (_branch == null)
             {
-                _branch = ExecuteCommand("hg.exe", "identify -b")[0];
+                _branch = ExecuteCommand("hg", "identify -b")[0];
             }
             return _branch;
         }
@@ -95,7 +95,7 @@ namespace MSBuildVersioning.Core
         {
             if (_tags == null)
             {
-                _tags = ExecuteCommand("hg.exe", "identify -t")[0];
+                _tags = ExecuteCommand("hg", "identify -t")[0];
             }
             return _tags;
         }
@@ -105,7 +105,7 @@ namespace MSBuildVersioning.Core
             if (_changeSetDate == null)
             {
                 var result =
-                    ExecuteCommand("hg.exe", $"log --template \"{{date|isodate}}\" -r{GetRevisionNumber()}");
+                    ExecuteCommand("hg", $"log --template \"{{date|isodate}}\" -r{GetRevisionNumber()}");
 
                 _changeSetDate = result[1];
             }

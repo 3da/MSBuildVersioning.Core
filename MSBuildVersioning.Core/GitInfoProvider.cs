@@ -4,7 +4,7 @@ namespace MSBuildVersioning.Core
 {
     /// <summary>
     /// Provides Mercurial information for a particular file path, by executing and scraping
-    /// information from the hg.exe command-line program.
+    /// information from the git command-line program.
     /// </summary>
     public class GitInfoProvider : SourceControlInfoProvider
     {
@@ -44,7 +44,7 @@ namespace MSBuildVersioning.Core
 
         private void InitRevision()
         {
-            ExecuteCommand("git.exe", "rev-list HEAD", output =>
+            ExecuteCommand("git", "rev-list HEAD", output =>
             {
                 if (_revisionId == null)
                 {
@@ -63,7 +63,7 @@ namespace MSBuildVersioning.Core
         {
             if (_isWorkingCopyDirty == null)
             {
-                ExecuteCommand("git.exe", "diff-index --quiet HEAD", (exitCode, error) =>
+                ExecuteCommand("git", "diff-index --quiet HEAD", (exitCode, error) =>
                 {
                     if (exitCode == 0)
                     {
@@ -88,7 +88,7 @@ namespace MSBuildVersioning.Core
         {
             if (_branch == null)
             {
-                _branch = ExecuteCommand("git.exe", "describe --all")[0];
+                _branch = ExecuteCommand("git", "describe --all")[0];
             }
             return _branch;
         }
@@ -97,7 +97,7 @@ namespace MSBuildVersioning.Core
         {
             if (_tags == null)
             {
-                _tags = ExecuteCommand("git.exe", "describe")[0];
+                _tags = ExecuteCommand("git", "describe")[0];
             }
             return _tags;
         }
