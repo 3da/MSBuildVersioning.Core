@@ -5,7 +5,7 @@ namespace MSBuildVersioning.Core
 {
     /// <summary>
     /// Provides Subversion information for a particular file path, by executing and scraping
-    /// information from the svn.exe command-line program.
+    /// information from the svn command-line program.
     /// </summary>
     public class SvnInfoProvider : SourceControlInfoProvider
     {
@@ -25,7 +25,7 @@ namespace MSBuildVersioning.Core
             if (_revisionNumber == null)
             {
                 SvnInfoParser parser = new SvnInfoParser();
-                ExecuteCommand("svn.exe", "info -R", parser.ReadLine, null);
+                ExecuteCommand("svn", "info -R", parser.ReadLine, null);
                 _revisionNumber = parser.MaxRevisionNumber;
                 _isMixedRevisions = parser.IsMixedRevisions;
             }
@@ -46,7 +46,7 @@ namespace MSBuildVersioning.Core
             if (_isWorkingCopyDirty == null)
             {
                 SvnStatusParser parser = new SvnStatusParser();
-                ExecuteCommand("svn.exe", "status", parser.ReadLine, null);
+                ExecuteCommand("svn", "status", parser.ReadLine, null);
                 _isWorkingCopyDirty = parser.IsWorkingCopyDirty;
             }
             return (bool)_isWorkingCopyDirty;
@@ -56,7 +56,7 @@ namespace MSBuildVersioning.Core
         {
             if (_repositoryUrl == null)
             {
-                IList<string> svnInfo = ExecuteCommand("svn.exe", "info");
+                IList<string> svnInfo = ExecuteCommand("svn", "info");
                 foreach (string line in svnInfo)
                 {
                     if (line.StartsWith("URL: "))
